@@ -27,7 +27,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
 
         public string Description => GetTranslatedPluginDescription();
 
-        private VSCodeInstance defaultInstalce;
+        private VSCodeInstance defaultInstance;
 
         private readonly VSCodeWorkspacesApi _workspacesApi = new();
 
@@ -39,10 +39,10 @@ namespace Flow.Plugin.VSCodeWorkspaces
             var workspaces = new List<VSCodeWorkspace>();
 
             // User defined extra workspaces
-            if (defaultInstalce != null)
+            if (defaultInstance != null)
             {
                 workspaces.AddRange(_settings.CustomWorkspaces.Select(uri =>
-                    VSCodeWorkspacesApi.ParseVSCodeUri(uri, defaultInstalce)));
+                    VSCodeWorkspacesApi.ParseVSCodeUri(uri, defaultInstance)));
             }
 
             // Search opened workspaces
@@ -129,8 +129,8 @@ namespace Flow.Plugin.VSCodeWorkspaces
 
             if (ws.TypeWorkspace != TypeWorkspace.Local)
             {
-                title = ws.Lable != null
-                    ? $"{ws.Lable}"
+                title = ws.Label != null
+                    ? $"{ws.Label}"
                     : $"{title}{(ws.ExtraInfo != null ? $" - {ws.ExtraInfo}" : string.Empty)} ({typeWorkspace})";
             }
 
@@ -187,7 +187,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
             VSCodeInstances.LoadVSCodeInstances();
 
             // Prefer stable version, or the first one we got
-            defaultInstalce = VSCodeInstances.Instances.Find(e => e.VSCodeVersion == VSCodeVersion.Stable) ??
+            defaultInstance = VSCodeInstances.Instances.Find(e => e.VSCodeVersion == VSCodeVersion.Stable) ??
                               VSCodeInstances.Instances.FirstOrDefault();
         }
 

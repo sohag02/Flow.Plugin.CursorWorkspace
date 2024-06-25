@@ -57,9 +57,5 @@ namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
                 AppData.GetHashCode(StringComparison.InvariantCultureIgnoreCase));
         }
 
-        static public VSCodeInstance GetThis()
-        {
-
-        }
     }
 }

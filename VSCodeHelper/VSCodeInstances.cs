@@ -119,11 +119,6 @@ namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
                     version = "VSCodium";
                     instance.VSCodeVersion = VSCodeVersion.Stable;
                 }
-                else if (vscodeExecFile.EndsWith("Cursor"))
-                {
-                    version = "Cursor";
-                    instance.VSCodeVersion = VSCodeVersion.Cursor;
-                }
 
                 if (version == string.Empty)
                     continue;
