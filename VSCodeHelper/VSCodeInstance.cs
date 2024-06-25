@@ -13,6 +13,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
         Stable = 1,
         Insiders = 2,
         Exploration = 3,
+        Cursor = 4,
     }
 
     public class VSCodeInstance : IEquatable<VSCodeInstance>
@@ -54,6 +55,11 @@ namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
             return HashCode.Combine((int)VSCodeVersion,
                 ExecutablePath.GetHashCode(StringComparison.InvariantCultureIgnoreCase),
                 AppData.GetHashCode(StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        static public VSCodeInstance GetThis()
+        {
+
         }
     }
 }

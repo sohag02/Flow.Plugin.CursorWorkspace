@@ -64,63 +64,71 @@ namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
         {
             if (_systemPath == Environment.GetEnvironmentVariable("PATH"))
                 return;
-            
-            
+
+
             Instances = new List<VSCodeInstance>();
 
             _systemPath = Environment.GetEnvironmentVariable("PATH") ?? "";
-            var paths = _systemPath.Split(";").Where(x =>
-                x.Contains("VS Code", StringComparison.OrdinalIgnoreCase) ||
-                x.Contains("codium", StringComparison.OrdinalIgnoreCase) ||
-                x.Contains("vscode", StringComparison.OrdinalIgnoreCase));
+            var paths = _systemPath.Split(";").Where(path =>
+                path.Contains("VS Code", StringComparison.OrdinalIgnoreCase) ||
+                path.Contains("codium", StringComparison.OrdinalIgnoreCase) ||
+                path.Contains("vscode", StringComparison.OrdinalIgnoreCase) ||
+                path.Contains("Cursor"));
             foreach (var path in paths)
             {
                 if (!Directory.Exists(path))
                     continue;
-                
-                var files = Directory.EnumerateFiles(path).Where(x =>
-                    (x.Contains("code", StringComparison.OrdinalIgnoreCase) ||
-                     x.Contains("codium", StringComparison.OrdinalIgnoreCase))
-                    && !x.EndsWith(".cmd", StringComparison.OrdinalIgnoreCase)).ToArray();
+
+                // PATHにいたpath以下にいるファイル名に "code" または "codium" が含まれ、".cmd" で終わらないものリスト
+                var files = Directory.EnumerateFiles(path).Where(file =>
+                    (file.Contains("code", StringComparison.OrdinalIgnoreCase) ||
+                     file.Contains("codium", StringComparison.OrdinalIgnoreCase))
+                    && !file.EndsWith(".cmd", StringComparison.OrdinalIgnoreCase)).ToArray();
 
                 var iconPath = Path.GetDirectoryName(path);
 
                 if (files.Length <= 0)
                     continue;
-                        
-                var file = files[0];
+
+                // リストの最初というよりはリストには引っかかった場合は一つしかないため[0]を取り出す
+                var vscodeExecFile = files[0];
                 var version = string.Empty;
 
                 var instance = new VSCodeInstance
                 {
-                    ExecutablePath = file,
+                    ExecutablePath = vscodeExecFile,
                 };
 
-                if (file.EndsWith("code"))
+                if (vscodeExecFile.EndsWith("code"))
                 {
                     version = "Code";
                     instance.VSCodeVersion = VSCodeVersion.Stable;
                 }
-                else if (file.EndsWith("code-insiders"))
+                else if (vscodeExecFile.EndsWith("code-insiders"))
                 {
                     version = "Code - Insiders";
                     instance.VSCodeVersion = VSCodeVersion.Insiders;
                 }
-                else if (file.EndsWith("code-exploration"))
+                else if (vscodeExecFile.EndsWith("code-exploration"))
                 {
                     version = "Code - Exploration";
                     instance.VSCodeVersion = VSCodeVersion.Exploration;
                 }
-                else if (file.EndsWith("codium"))
+                else if (vscodeExecFile.EndsWith("codium"))
                 {
                     version = "VSCodium";
                     instance.VSCodeVersion = VSCodeVersion.Stable;
                 }
+                else if (vscodeExecFile.EndsWith("Cursor"))
+                {
+                    version = "Cursor";
+                    instance.VSCodeVersion = VSCodeVersion.Cursor;
+                }
 
                 if (version == string.Empty)
                     continue;
-                        
-                        
+
+
                 var portableData = Path.Join(iconPath, "data");
                 instance.AppData = Directory.Exists(portableData) ? Path.Join(portableData, "user-data") : Path.Combine(_userAppDataPath, version);
                 var iconVSCode = Path.Join(iconPath, $"{version}.exe");
