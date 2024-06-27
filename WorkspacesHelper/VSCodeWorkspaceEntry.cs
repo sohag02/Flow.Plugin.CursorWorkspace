@@ -4,9 +4,9 @@
 
 using System.Text.Json.Serialization;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
-    public class VSCodeWorkspaceEntry
+    public class CursorWorkspaceEntry
     {
         [JsonPropertyName("folderUri")]
         public string FolderUri { get; set; }

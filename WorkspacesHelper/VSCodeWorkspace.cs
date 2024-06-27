@@ -3,12 +3,12 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Flow.Plugin.VSCodeWorkspaces.Properties;
-using Flow.Plugin.VSCodeWorkspaces.VSCodeHelper;
+using Flow.Plugin.CursorWorkspaces.Properties;
+using Flow.Plugin.CursorWorkspaces.VSCodeHelper;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
-    public record VSCodeWorkspace
+    public record CursorWorkspace
     {
         public PathString Path { get; init; }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Flow.Plugin.VSCodeWorkspaces
+namespace Flow.Plugin.CursorWorkspaces
 {
     public readonly struct PathString : IEquatable<PathString>
     {

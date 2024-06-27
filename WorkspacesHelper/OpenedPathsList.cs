@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
     public class OpenedPathsList
     {
@@ -13,6 +13,6 @@ namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
         public List<dynamic> Workspaces3 { get; set; }
 
         [JsonPropertyName("entries")]
-        public List<VSCodeWorkspaceEntry> Entries { get; set; }
+        public List<CursorWorkspaceEntry> Entries { get; set; }
     }
 }

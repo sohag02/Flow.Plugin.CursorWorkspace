@@ -1,11 +1,11 @@
 using Flow.Launcher.Plugin;
-using Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper;
+using Flow.Plugin.CursorWorkspaces.WorkspacesHelper;
 using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Flow.Plugin.VSCodeWorkspaces
+namespace Flow.Plugin.CursorWorkspaces
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml

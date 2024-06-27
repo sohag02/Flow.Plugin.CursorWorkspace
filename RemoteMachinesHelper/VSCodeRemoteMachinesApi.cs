@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using Flow.Plugin.VSCodeWorkspaces.SshConfigParser;
-using Flow.Plugin.VSCodeWorkspaces.VSCodeHelper;
+using Flow.Plugin.CursorWorkspaces.SshConfigParser;
+using Flow.Plugin.CursorWorkspaces.VSCodeHelper;
 
-namespace Flow.Plugin.VSCodeWorkspaces.RemoteMachinesHelper
+namespace Flow.Plugin.CursorWorkspaces.RemoteMachinesHelper
 {
     public class VSCodeRemoteMachinesApi
     {
@@ -61,7 +61,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.RemoteMachinesHelper
                         catch (Exception ex)
                         {
                             var message = $"Failed to deserialize ${vscode_settings}";
-                            Main._context.API.LogException("VSCodeWorkSpaces", message, ex);
+                            Main._context.API.LogException("CursorWorkSpaces", message, ex);
                         }
                     }
                 }

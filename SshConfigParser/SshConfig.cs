@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Flow.Plugin.VSCodeWorkspaces.SshConfigParser
+namespace Flow.Plugin.CursorWorkspaces.SshConfigParser
 {
     public class SshConfig
     {

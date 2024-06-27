@@ -1,13 +1,13 @@
 {
-  "ID": "525995402BEF4A8CA860D92F6D108092",
-  "Decription": "Opens workspaces, remote machines (SSH or Codespaces) and containers, previously opened in VS Code.",
-  "ActionKeyword": "{",
-  "Name": "VS Code Workspaces",
-  "Author": "ricardosantos9521",
-  "Version": "1.3.1",
+  "ID": "435b5226a00840cebfbdb54dacd26e9d",
+  "Decription": "Opens workspaces, remote machines (SSH or Codespaces) and containers, previously opened in Cursor.",
+  "ActionKeyword": "\\",
+  "Name": "Cursor Workspaces",
+  "Author": "",
+  "Version": "0.1.0",
   "Language": "csharp",
-  "Website": "https://github.com/taooceros/Flow.Plugin.VSCodeWorkspace",
-  "ExecuteFileName": "Flow.Plugin.VSCodeWorkspaces.dll",
+  "Website": "",
+  "ExecuteFileName": "Flow.Plugin.CursorWorkspaces.dll",
   "IsGlobal": false,
   "IcoPath": "Images\\code-light.png"
 }

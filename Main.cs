@@ -2,7 +2,7 @@
 // The Microsoft Corporation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace Flow.Plugin.VSCodeWorkspaces
+namespace Flow.Plugin.CursorWorkspaces
 {
     using Flow.Launcher.Plugin;
     using Properties;
@@ -29,20 +29,20 @@ namespace Flow.Plugin.VSCodeWorkspaces
 
         private VSCodeInstance defaultInstance;
 
-        private readonly VSCodeWorkspacesApi _workspacesApi = new();
+        private readonly CursorWorkspacesApi _workspacesApi = new();
 
         private readonly VSCodeRemoteMachinesApi _machinesApi = new();
 
         public List<Result> Query(Query query)
         {
             var results = new List<Result>();
-            var workspaces = new List<VSCodeWorkspace>();
+            var workspaces = new List<CursorWorkspace>();
 
             // User defined extra workspaces
             if (defaultInstance != null)
             {
                 workspaces.AddRange(_settings.CustomWorkspaces.Select(uri =>
-                    VSCodeWorkspacesApi.ParseVSCodeUri(uri, defaultInstance)));
+                    CursorWorkspacesApi.ParseVSCodeUri(uri, defaultInstance)));
             }
 
             // Search opened workspaces
@@ -122,7 +122,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
             return results;
         }
 
-        private Result CreateWorkspaceResult(VSCodeWorkspace ws)
+        private Result CreateWorkspaceResult(CursorWorkspace ws)
         {
             var title = $"{ws.FolderName}";
             var typeWorkspace = ws.WorkspaceTypeToString();
@@ -156,7 +156,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
 
                         var process = new ProcessStartInfo
                         {
-                            FileName = ws.VSCodeInstance.ExecutablePath,
+                            FileName = "cursor",
                             UseShellExecute = true,
                             WindowStyle = ProcessWindowStyle.Hidden,
                         };
@@ -183,6 +183,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
         {
             _context = context;
             _settings = context.API.LoadSettingJsonStorage<Settings>();
+
 
             VSCodeInstances.LoadVSCodeInstances();
 
@@ -211,7 +212,7 @@ namespace Flow.Plugin.VSCodeWorkspaces
         public List<Result> LoadContextMenus(Result selectedResult)
         {
             List<Result> results = new();
-            if (selectedResult.ContextData is VSCodeWorkspace ws && ws.TypeWorkspace == TypeWorkspace.Local)
+            if (selectedResult.ContextData is CursorWorkspace ws && ws.TypeWorkspace == TypeWorkspace.Local)
             {
                 results.Add(new Result
                 {

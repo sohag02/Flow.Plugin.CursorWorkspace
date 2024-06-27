@@ -6,14 +6,13 @@ using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Flow.Plugin.VSCodeWorkspaces.VSCodeHelper
+namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
 {
     public enum VSCodeVersion
     {
         Stable = 1,
         Insiders = 2,
-        Exploration = 3,
-        Cursor = 4,
+        Exploration = 3
     }
 
     public class VSCodeInstance : IEquatable<VSCodeInstance>

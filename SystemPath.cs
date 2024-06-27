@@ -4,7 +4,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace Flow.Plugin.VSCodeWorkspaces
+namespace Flow.Plugin.CursorWorkspaces
 {
     internal class SystemPath
     {

@@ -8,18 +8,18 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Flow.Plugin.VSCodeWorkspaces.VSCodeHelper;
+using Flow.Plugin.CursorWorkspaces.VSCodeHelper;
 using Microsoft.Data.Sqlite;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
-    public class VSCodeWorkspacesApi
+    public class CursorWorkspacesApi
     {
-        public VSCodeWorkspacesApi()
+        public CursorWorkspacesApi()
         {
         }
 
-        public static VSCodeWorkspace ParseVSCodeUri(string uri, VSCodeInstance vscodeInstance)
+        public static CursorWorkspace ParseVSCodeUri(string uri, VSCodeInstance vscodeInstance)
         {
             if (uri != null && uri is string)
             {
@@ -36,7 +36,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
                         folderName = dirInfo.Name.TrimEnd(':');
                     }
 
-                    return new VSCodeWorkspace()
+                    return new CursorWorkspace()
                     {
                         Path = unescapeUri,
                         RelativePath = typeWorkspace.Path,
@@ -53,11 +53,11 @@ namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
 
         public Regex workspaceLabelParser = new Regex("(.+?)(\\[.+\\])");
 
-        public List<VSCodeWorkspace> Workspaces
+        public List<CursorWorkspace> Workspaces
         {
             get
             {
-                var results = new List<VSCodeWorkspace>();
+                var results = new List<CursorWorkspace>();
 
                 foreach (var vscodeInstance in VSCodeInstances.Instances)
                 {
@@ -81,7 +81,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
                                         vscodeStorageFile.OpenedPathsList.Workspaces3
                                             .Select(workspaceUri => ParseVSCodeUri(workspaceUri, vscodeInstance))
                                             .Where(uri => uri != null)
-                                            .Select(uri => (VSCodeWorkspace)uri));
+                                            .Select(uri => (CursorWorkspace)uri));
                                 }
 
                                 // vscode v1.55.0 or later
@@ -97,7 +97,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
                         catch (Exception ex)
                         {
                             var message = $"Failed to deserialize ${vscodeStorage}";
-                            Main._context.API.LogException("VSCodeWorkspaceApi", message, ex);
+                            Main._context.API.LogException("CursorWorkspaceApi", message, ex);
                         }
                     }
 

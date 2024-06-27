@@ -4,7 +4,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
     public class ParseVSCodeUri
     {

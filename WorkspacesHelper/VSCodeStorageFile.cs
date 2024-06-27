@@ -4,7 +4,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Flow.Plugin.VSCodeWorkspaces.WorkspacesHelper
+namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
 {
     public class VSCodeStorageFile
     {

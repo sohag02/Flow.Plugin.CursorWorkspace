@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace Flow.Plugin.VSCodeWorkspaces.SshConfigParser
+namespace Flow.Plugin.CursorWorkspaces.SshConfigParser
 {
     public class SshHost
     {

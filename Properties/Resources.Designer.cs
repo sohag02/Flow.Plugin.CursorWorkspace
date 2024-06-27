@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Flow.Plugin.VSCodeWorkspaces.Properties
+namespace Flow.Plugin.CursorWorkspaces.Properties
 {
     using System;
 
@@ -45,7 +45,7 @@ namespace Flow.Plugin.VSCodeWorkspaces.Properties
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Flow.Plugin.VSCodeWorkspaces.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Flow.Plugin.CursorWorkspaces.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

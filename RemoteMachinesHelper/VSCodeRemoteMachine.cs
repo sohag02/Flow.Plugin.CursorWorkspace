@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using Flow.Plugin.VSCodeWorkspaces.VSCodeHelper;
+using Flow.Plugin.CursorWorkspaces.VSCodeHelper;
 
-namespace Flow.Plugin.VSCodeWorkspaces.RemoteMachinesHelper
+namespace Flow.Plugin.CursorWorkspaces.RemoteMachinesHelper
 {
     public class VSCodeRemoteMachine : IEquatable<VSCodeRemoteMachine>
     {

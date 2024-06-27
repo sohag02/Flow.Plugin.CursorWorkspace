@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Flow.Plugin.VSCodeWorkspaces
+namespace Flow.Plugin.CursorWorkspaces
 {
     public class Settings
     {
