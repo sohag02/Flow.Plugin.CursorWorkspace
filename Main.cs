@@ -40,16 +40,12 @@ namespace Flow.Plugin.CursorWorkspaces
 
             // User defined extra workspaces
             if (defaultInstance != null)
-            {
                 workspaces.AddRange(_settings.CustomWorkspaces.Select(uri =>
                     CursorWorkspacesApi.ParseVSCodeUri(uri, defaultInstance)));
-            }
 
             // Search opened workspaces
             if (_settings.DiscoverWorkspaces)
-            {
                 workspaces.AddRange(_workspacesApi.Workspaces);
-            }
 
             // Simple de-duplication
             results.AddRange(workspaces.Distinct()
@@ -58,55 +54,8 @@ namespace Flow.Plugin.CursorWorkspaces
 
             // Search opened remote machines
             if (_settings.DiscoverMachines)
-            {
-                _machinesApi.Machines.ForEach(a =>
-                {
-                    var title = $"{a.Host}";
+                results.AddRange(GetResultFromOpenedRemoteMachines());
 
-                    if (!string.IsNullOrEmpty(a.User) && !string.IsNullOrEmpty(a.HostName))
-                    {
-                        title += $" [{a.User}@{a.HostName}]";
-                    }
-
-                    var tooltip = Resources.SSHRemoteMachine;
-
-                    results.Add(new Result
-                    {
-                        Title = title,
-                        SubTitle = Resources.SSHRemoteMachine,
-                        Icon = a.VSCodeInstance.RemoteIcon,
-                        TitleToolTip = tooltip,
-                        Action = c =>
-                        {
-                            bool hide;
-                            try
-                            {
-                                var process = new ProcessStartInfo
-                                {
-                                    FileName = a.VSCodeInstance.ExecutablePath,
-                                    UseShellExecute = true,
-                                    Arguments =
-                                        $"--new-window --enable-proposed-api ms-vscode-remote.remote-ssh --remote ssh-remote+{((char)34) + a.Host + ((char)34)}",
-                                    WindowStyle = ProcessWindowStyle.Hidden,
-                                };
-                                Process.Start(process);
-
-                                hide = true;
-                            }
-                            catch (Win32Exception)
-                            {
-                                var name = $"{_context.CurrentPluginMetadata.Name}";
-                                string msg = Resources.OpenFail;
-                                _context.API.ShowMsg(name, msg, string.Empty);
-                                hide = false;
-                            }
-
-                            return hide;
-                        },
-                        ContextData = a,
-                    });
-                });
-            }
 
             if (query.ActionKeyword == string.Empty ||
                 (query.ActionKeyword != string.Empty && query.Search != string.Empty))
@@ -119,6 +68,58 @@ namespace Flow.Plugin.CursorWorkspaces
             }
 
 
+            return results;
+        }
+
+        private List<Result> GetResultFromOpenedRemoteMachines()
+        {
+            var results = new List<Result>();
+            _machinesApi.Machines.ForEach(a =>
+            {
+                var title = $"{a.Host}";
+
+                if (!string.IsNullOrEmpty(a.User) && !string.IsNullOrEmpty(a.HostName))
+                    title += $" [{a.User}@{a.HostName}]";
+
+
+                var tooltip = Resources.SSHRemoteMachine;
+
+                results.Add(new Result
+                {
+                    Title = title,
+                    SubTitle = Resources.SSHRemoteMachine,
+                    Icon = a.VSCodeInstance.RemoteIcon,
+                    TitleToolTip = tooltip,
+                    Action = c =>
+                    {
+                        bool hide;
+                        try
+                        {
+                            var process = new ProcessStartInfo
+                            {
+                                FileName = "cursor",
+                                UseShellExecute = true,
+                                Arguments =
+                                    $"--new-window --enable-proposed-api ms-vscode-remote.remote-ssh --remote ssh-remote+{((char)34) + a.Host + ((char)34)}",
+                                WindowStyle = ProcessWindowStyle.Hidden,
+                            };
+                            Process.Start(process);
+
+                            hide = true;
+                        }
+                        catch (Win32Exception)
+                        {
+                            var name = $"{_context.CurrentPluginMetadata.Name}";
+                            string msg = Resources.OpenFail;
+                            _context.API.ShowMsg(name, msg, string.Empty);
+                            hide = false;
+                        }
+
+                        return hide;
+                    },
+                    ContextData = a,
+                });
+            });
             return results;
         }
 

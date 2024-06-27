@@ -19,8 +19,6 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
     {
         public VSCodeVersion VSCodeVersion { get; set; }
 
-        public string ExecutablePath { get; set; } = string.Empty;
-
         public string AppData { get; set; } = string.Empty;
 
         public ImageSource WorkspaceIcon() => WorkspaceIconBitMap;
@@ -32,17 +30,16 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
         public BitmapImage RemoteIconBitMap { get; set; }
         public bool Equals(VSCodeInstance other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
                 return false;
             if (ReferenceEquals(this, other))
                 return true;
             return VSCodeVersion == other.VSCodeVersion
-                   && string.Equals(ExecutablePath, other.ExecutablePath, StringComparison.InvariantCultureIgnoreCase)
                    && string.Equals(AppData, other.AppData, StringComparison.InvariantCultureIgnoreCase);
         }
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is null)
                 return false;
             if (ReferenceEquals(this, obj))
                 return true;
@@ -52,7 +49,6 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
         public override int GetHashCode()
         {
             return HashCode.Combine((int)VSCodeVersion,
-                ExecutablePath.GetHashCode(StringComparison.InvariantCultureIgnoreCase),
                 AppData.GetHashCode(StringComparison.InvariantCultureIgnoreCase));
         }
 

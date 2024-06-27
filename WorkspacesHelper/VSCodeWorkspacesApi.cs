@@ -57,7 +57,7 @@ namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
         {
             get
             {
-                var results = new List<CursorWorkspace>();
+                List<CursorWorkspace> workspaces = [];
 
                 foreach (var vscodeInstance in VSCodeInstances.Instances)
                 {
@@ -77,7 +77,7 @@ namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
                                 // for previous versions of vscode
                                 if (vscodeStorageFile.OpenedPathsList?.Workspaces3 != null)
                                 {
-                                    results.AddRange(
+                                    workspaces.AddRange(
                                         vscodeStorageFile.OpenedPathsList.Workspaces3
                                             .Select(workspaceUri => ParseVSCodeUri(workspaceUri, vscodeInstance))
                                             .Where(uri => uri != null)
@@ -87,7 +87,7 @@ namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
                                 // vscode v1.55.0 or later
                                 if (vscodeStorageFile.OpenedPathsList?.Entries != null)
                                 {
-                                    results.AddRange(vscodeStorageFile.OpenedPathsList.Entries
+                                    workspaces.AddRange(vscodeStorageFile.OpenedPathsList.Entries
                                         .Select(x => x.FolderUri)
                                         .Select(workspaceUri => ParseVSCodeUri(workspaceUri, vscodeInstance))
                                         .Where(uri => uri != null));
@@ -105,40 +105,43 @@ namespace Flow.Plugin.CursorWorkspaces.WorkspacesHelper
                     using var connection = new SqliteConnection(
                         $"Data Source={vscodeInstance.AppData}/User/globalStorage/state.vscdb;mode=readonly;cache=shared;");
                     connection.Open();
+
                     var command = connection.CreateCommand();
                     command.CommandText = "SELECT value FROM ItemTable where key = 'history.recentlyOpenedPathsList'";
+
                     var result = command.ExecuteScalar();
-                    if (result != null)
+                    if (result == null) continue;
+
+                    using var historyDoc = JsonDocument.Parse(result.ToString()!);
+                    var root = historyDoc.RootElement;
+                    if (!root.TryGetProperty("entries", out var entries))
+                        continue;
+                    foreach (var entry in entries.EnumerateArray())
                     {
-                        using var historyDoc = JsonDocument.Parse(result.ToString()!);
-                        var root = historyDoc.RootElement;
-                        if (!root.TryGetProperty("entries", out var entries))
+                        if (!entry.TryGetProperty("folderUri", out var folderUri))
                             continue;
-                        foreach (var entry in entries.EnumerateArray())
+                        var workspaceUri = folderUri.GetString();
+                        var workspace = ParseVSCodeUri(workspaceUri, vscodeInstance);
+                        if (workspace == null)
+                            continue;
+
+                        if (entry.TryGetProperty("label", out var label))
                         {
-                            if (!entry.TryGetProperty("folderUri", out var folderUri))
-                                continue;
-                            var workspaceUri = folderUri.GetString();
-                            var workspace = ParseVSCodeUri(workspaceUri, vscodeInstance);
-                            if (workspace == null)
-                                continue;
-
-                            if (entry.TryGetProperty("label", out var label))
+                            var labelString = label.GetString()!;
+                            var matchGroup = workspaceLabelParser.Match(labelString);
+                            workspace = workspace with
                             {
-                                var labelString = label.GetString()!;
-                                var matchGroup = workspaceLabelParser.Match(labelString);
-                                workspace = workspace with
-                                {
-                                    Label = $"{matchGroup.Groups[2]} {matchGroup.Groups[1]}"
-                                };
-                            }
-
-                            results.Add(workspace);
+                                Label = $"{matchGroup.Groups[2]} {matchGroup.Groups[1]}"
+                            };
                         }
+
+                        workspaces.Add(workspace);
                     }
+
+                    Main._context.API.LogInfo("CursorWorkspaces", "loaded workspaces : ", string.Join(",", workspaces.Select(x => x.Path)) + " \nfrom " + Path.Combine(vscodeInstance.AppData, "storage.json"));
                 }
 
-                return results;
+                return workspaces;
             }
         }
     }

@@ -39,10 +39,6 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
             }
         }
 
-        private static string loadCursorPath()
-        {
-            return "impl";
-        }
 
         private static Bitmap BitmapOverlayToCenter(Bitmap bitmap1, Bitmap overlayBitmap)
         {
@@ -64,14 +60,13 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
             return finalBitmap;
         }
 
-        // Gets the executablePath and AppData foreach instance of VSCode
+        // Gets the AppData foreach instance of VSCode
         public static void LoadVSCodeInstances()
         {
             if (_systemPath == Environment.GetEnvironmentVariable("PATH"))
                 return;
 
-
-            Instances = new List<VSCodeInstance>();
+            Instances = [];
 
             _systemPath = Environment.GetEnvironmentVariable("PATH") ?? "";
 
@@ -85,10 +80,9 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
                 if (!Directory.Exists(path))
                     continue;
 
-                // PATHにいたpath以下にいるファイル名に "code" または "codium" が含まれ、".cmd" で終わらないものリスト
                 var files = Directory.EnumerateFiles(path).Where(file =>
-                    (file.Contains("code", StringComparison.OrdinalIgnoreCase) ||
-                    file.Contains("codium", StringComparison.OrdinalIgnoreCase))
+                     file.Contains("code", StringComparison.OrdinalIgnoreCase) ||
+                    file.Contains("codium", StringComparison.OrdinalIgnoreCase)
                     && !file.EndsWith(".cmd", StringComparison.OrdinalIgnoreCase)).ToArray();
 
                 var iconPath = Path.GetDirectoryName(path);
@@ -96,15 +90,17 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
                 if (files.Length <= 0)
                     continue;
 
-                // リストの最初というよりはリストには引っかかった場合は一つしかないため[0]を取り出す
                 var vscodeExecFile = files[0];
                 var version = string.Empty;
 
-                var instance = new VSCodeInstance { ExecutablePath = vscodeExecFile };
+                var instance = new VSCodeInstance();
+                // Main._context.API.LogInfo("CursorWorkspaces", "vscodeExecFile : " + vscodeExecFile + " : " + files.Length);
 
                 if (vscodeExecFile.EndsWith("code"))
                 {
-                    version = "Code";
+                    if (vscodeExecFile.Contains("cursor"))
+                        version = "Cursor";
+                    else version = "Code";
                     instance.VSCodeVersion = VSCodeVersion.Stable;
                 }
                 else if (vscodeExecFile.EndsWith("code-insiders"))
@@ -126,7 +122,6 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
                 if (version == string.Empty)
                     continue;
 
-
                 var portableData = Path.Join(iconPath, "data");
                 instance.AppData = Directory.Exists(portableData) ? Path.Join(portableData, "user-data") : Path.Combine(_userAppDataPath, version);
                 var iconVSCode = Path.Join(iconPath, $"{version}.exe");
@@ -144,6 +139,21 @@ namespace Flow.Plugin.CursorWorkspaces.VSCodeHelper
 
                 Instances.Add(instance);
             }
+
+            var cursorInstance = new VSCodeInstance
+            {
+                AppData = Path.Combine(_userAppDataPath, "Cursor"),
+                VSCodeVersion = VSCodeVersion.Stable
+            };
+            var cursorAppData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs\\cursor");
+
+            var cursorBitmapIcon = Icon.ExtractAssociatedIcon(Path.Join(cursorAppData, $"Cursor.exe"))?.ToBitmap();
+            var cursorFolderIcon = (Bitmap)Image.FromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "//Images//folder.png");
+            var cursorMonitorIcon = (Bitmap)Image.FromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "//Images//monitor.png");
+            cursorInstance.WorkspaceIconBitMap = Bitmap2BitmapImage(BitmapOverlayToCenter(cursorFolderIcon, cursorBitmapIcon));
+            cursorInstance.RemoteIconBitMap = Bitmap2BitmapImage(BitmapOverlayToCenter(cursorMonitorIcon, cursorBitmapIcon));
+
+            Instances.Add(cursorInstance);
         }
     }
 }

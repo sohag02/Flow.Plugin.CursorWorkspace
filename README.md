@@ -1,8 +1,8 @@
-A plugin for Flow Launcher that allows user to quickly open the recent workspace of VSCode.
+A plugin for Flow Launcher that allows user to quickly open the recent workspace of Cursor.
 
 ![image](https://github.com/taooceros/Flow.Plugin.CursorWorkspace/assets/45326534/15609d5d-869f-4df4-b62a-0d0d9b3fc31a)
 
-The default actionkeyword is `{`.
+The default actionkeyword is `cu`.
 
 Remote Workspace (WSL/SSH) are also supported.
 
@@ -10,4 +10,4 @@ Remote Workspace (WSL/SSH) are also supported.
 
 Hope you enjoy it!
 
-The original source code is from [Microsoft Powertoys](https://github.com/microsoft/PowerToys/tree/main/src/modules/launcher/Plugins/Community.PowerToys.Run.Plugin.CursorWorkspaces).
+The original source code is from [Microsoft Powertoys](https://github.com/microsoft/PowerToys/tree/main/src/modules/launcher/Plugins/Community.PowerToys.Run.Plugin.VSCodeWorkspaces).
