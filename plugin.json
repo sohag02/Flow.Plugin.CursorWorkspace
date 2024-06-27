@@ -4,7 +4,7 @@
   "ActionKeyword": "cu",
   "Name": "Cursor Workspaces",
   "Author": "",
-  "Version": "0.1.0",
+  "Version": "1.0.0",
   "Language": "csharp",
   "Website": "",
   "ExecuteFileName": "Flow.Plugin.CursorWorkspaces.dll",
