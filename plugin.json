@@ -3,10 +3,10 @@
   "Decription": "Opens workspaces, remote machines (SSH or Codespaces) and containers, previously opened in Cursor.",
   "ActionKeyword": "cu",
   "Name": "Cursor Workspaces",
-  "Author": "",
+  "Author": "cou723",
   "Version": "1.0.0",
   "Language": "csharp",
-  "Website": "",
+  "Website": "https://github.com/cou723/Flow.Plugin.CursorWorkspace",
   "ExecuteFileName": "Flow.Plugin.CursorWorkspaces.dll",
   "IsGlobal": false,
   "IcoPath": "Images\\code-light.png"
