@@ -228,6 +228,25 @@ namespace Flow.Plugin.CursorWorkspaces
                     },
                     ContextData = ws,
                 });
+                results.Add(new Result
+                {
+                    Title = "Open In CMD",
+                    SubTitle = "Open folder in command prompt",
+                    Icon = ws.VSCodeInstance.WorkspaceIcon,
+                    TitleToolTip = Resources.OpenFolderSubTitle,
+                    Action = c =>
+                    {
+                        string folderPath = SystemPath.RealPath(ws.RelativePath);
+
+                        ProcessStartInfo processStartInfo = new ProcessStartInfo();
+                        processStartInfo.FileName = "cmd.exe";
+                        processStartInfo.Arguments = $"/K cd /d \"{folderPath}\""; // '/K' keeps the command prompt open, '/d' switches drives if necessary
+                        processStartInfo.WorkingDirectory = folderPath;
+
+                        Process.Start(processStartInfo);
+                    }
+                    ContextData = ws,
+                });
             }
 
             return results;
